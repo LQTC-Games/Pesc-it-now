@@ -21,7 +21,7 @@ Para poder compilar el juego, tu sistema debe reconocer los comandos de RGBDS de
 2. Pon el siguiente comando, sustituyendo `<rgbds_path>` por la ruta completa hacia tu carpeta de RGBDS (donde se encuentran `rgbasm.exe` y el resto de herramientas):
 
    ```cmd
-   setx PATH "%PATH%;<rgbds_path>"
+   setx PATH "%PATH%<rgbds_path>;"
    ```
    *(Ejemplo: `setx PATH "%PATH%;C:\Users\tu_usuario\Desktop\ensamblador\rgbds"`)*
 
