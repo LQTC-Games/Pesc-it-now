@@ -1,0 +1,37 @@
+
+# ==========================================
+# Archivos de compilación de RGBDS
+# ==========================================
+# Archivos intermedios (objetos)
+*.o
+
+# Archivos de símbolos y mapas de memoria generados por rgblink
+*.sym
+*.map
+
+# Archivos compilados finales (la ROM del juego)
+*.gb
+*.gbc
+
+# (Opcional) Si quieres ignorar directamente todo lo que hay en la carpeta build
+# build/
+
+
+# ==========================================
+# Archivos del emulador (BGB)
+# ==========================================
+# Partidas guardadas por la consola (.sav) y estados del emulador (.sn1, .sn2, etc.)
+*.sav
+*.sn*
+bgb.ini
+
+
+# ==========================================
+# Archivos del sistema y editores
+# ==========================================
+# Archivos temporales de Windows
+Thumbs.db
+desktop.ini
+
+# Configuraciones locales de Visual Studio Code (opcional)
+.vscode/
