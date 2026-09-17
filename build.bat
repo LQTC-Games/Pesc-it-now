@@ -20,7 +20,6 @@ echo Enlazando...
 :: Pasa la variable con todos los .o al linker
 rgblink -o build/juego.gb -n build/juego.sym !OBJ_FILES!
 
-echo Arreglando cabecera...
 rgbfix -v -p 0xFF build/juego.gb
 
 echo Compilacion terminada.
