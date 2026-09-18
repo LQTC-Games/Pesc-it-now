@@ -1,8 +1,8 @@
 include "../include/hardware.inc"
 include "../include/include.inc"
 SECTION "INPUT VARIABLES", HRAM
-    estadoBotones:      DS 1
-    flancoAscendente:   DS 1
+    estadoBotones::      DS 1
+    flancoAscendente::   DS 1
 
 SECTION "UTILS", ROM0
 
@@ -91,7 +91,7 @@ SECTION "RANDOM SIMPLE CODE", ROM0
 ; OUTPUT: A(numero del 0 al 7)
 ; MODIFICA: A
 ; --------------------------------------
-generate_random_7:
+generate_random_7::
     ld a, [rand_simple_seed]    ; cargar semilla act
     add a, $17                  ; sumar const rara
     xor $5C                     ; mezclar bits
@@ -104,12 +104,12 @@ generate_random_7:
     .onRange
 ret 
 
-init_random_7:
+init_random_7::
     ld a, [$FF04]               ; leer el timer del sistema
     ld [rand_simple_seed], a    
 ret
 
-update_random_seed:
+update_random_seed::
     ld a, [rand_simple_seed]
     ld b, a                  ; guardar semilla en B
 
