@@ -22,21 +22,20 @@ ret
 
 
 scene_menu_buttons:
-    .checkB
-        ld a, [flancoAscendente]
-        bit 0, a
-        jr z, .checkA
-
-    .checkA
-        ld a, [flancoAscendente]
-        bit 1, a
-        jr z, .anyKey
-
-        ld a, 2
+    ld a, [flancoAscendente]
+    
+    .checkA:
+        bit 0, a      ; Comprueba el Botón A (Bit 0)
+        jr z, .checkB ; Si no se pulsó, salta a comprobar B
+        
+        ld a, 2       ; 2 = Escena de Juego
         ld [do_change], a
-
-    .anyKey
-ret
+        jr .anyKey    ; Ya hemos pulsado A, salimos
+        
+    .checkB:
+        
+    .anyKey:
+    ret
 
 scene_menu_update::
     call scene_menu_buttons

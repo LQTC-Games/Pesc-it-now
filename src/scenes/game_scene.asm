@@ -15,14 +15,16 @@ scene_game_init::
     call init_random_7
 ret
 
-scene_game_buttons: 
-    .checkA
-        ld a, [flancoAscendente]
-        bit 1, a
+scene_game_buttons:
+    ld a, [flancoAscendente]
+    .checkB:
+        bit 1, a      ; Comprueba el Botón B (Bit 1)
         jr z, .anyKey
-
-    .anyKey
-
+        
+        ld a, 1       ; 1 = Escena de Menú
+        ld [do_change], a 
+        
+    .anyKey:
 ret
 
 scene_game_update::
