@@ -7,15 +7,13 @@ SECTION "Entity Array", WRAM0
 ;;DATA
     RSRESET
     DEF Entity_Comp RB 1
-    DEF Entity_Type RB 1
+    DEF Entity_ID RB 1
     DEF Entity_OAMID RB 1           ;;comienza la id en 0, y va de 1 en 1, cada 1 en id son 8 posiciones en OAM
+    DEF Size RB 1
+    DEF Price RB 1
     DEF Entity_PosY RB 1
     DEF Entity_PosX RB 1
-    DEF Entity_VelY RB 1            ;;En pixels/s (primer bit es signo, 1 -> negativo)
-    DEF Entity_VelX RB 1            ;;En pixels/s (primer bit es signo, 1 -> negativo)
-    DEF Entity_Tile RB 1            ;;id del tile de la parte izquierda superior de la entidad
-    DEF Entity_Attr RB 1
-    DEF Entity_AnimID RB 1          
+    DEF Tile_num RB 1
 ;;Space for entities
     entity_array:: DS ENTITY_ARRAY_SIZE
 
@@ -28,59 +26,8 @@ SECTION "Entity Manager", ROM0
 ;;-------------------------------
 ;;ENTITY MANAGER-----------------
 ;;Struct player-------------------------------------------
-struct_player:
-    DB PLAYER_TYPE
-    DB 1 ;OAM ID
-    DB SPAWN_Y ;PosY
-    DB SPAWN_X ;PosX
-    DB 0 ;
-    DB 1 ;
-    DB SPRITE_PLAYER
-    DB DEFAULT_ATR
-    DB 0
-
-;;Struct spike-------------------------------------------
-struct_spike_r:
-    DB SPIKE_TYPE
-    DB 0 ;OAM ID
-    DB 0 ;PosY
-    DB 0 ;PosX
-    DB 0 ;
-    DB 0 ;
-    DB SPRITE_SPIKE_R
-    DB DEFAULT_ATR_SPIKES
-    DB 0
-
-struct_spike_l:
-    DB SPIKE_TYPE
-    DB 0 ;OAM ID
-    DB 0 ;PosY
-    DB 0 ;PosX
-    DB 0 ;
-    DB 0 ;
-    DB SPRITE_SPIKE_L
-    DB DEFAULT_ATR_SPIKES
-    DB 0
-
-;;Posiciones pinchos------------------------------------------------
-position_spikes_left:   
-    DB $02*8+16, $01*8+8 - 8 
-    DB $04*8+16, $01*8+8 - 8
-    DB $06*8+16, $01*8+8 - 8
-    DB $08*8+16, $01*8+8 - 8
-    DB $0A*8+16, $01*8+8 - 8
-    DB $0C*8+16, $01*8+8 - 8
-    DB $0E*8+16, $01*8+8 - 8
-
-position_spikes_right:   
-    DB $02*8+16, $11*8+8 +8
-    DB $04*8+16, $11*8+8 +8
-    DB $06*8+16, $11*8+8 +8
-    DB $08*8+16, $11*8+8 +8
-    DB $0A*8+16, $11*8+8 +8
-    DB $0C*8+16, $11*8+8 +8
-    DB $0E*8+16, $11*8+8 +8
-;;CODE
+;; AQUI IRIAN LOS STRUCTS PREDEFINIDOS SI QUEREMOS
+;;
 
 ;;--------------------------------------------------------
 ;; Inicializa el array de entidades.
