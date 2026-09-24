@@ -6,20 +6,17 @@ include "../include/hardware.inc"
 SECTION "Entity Array", WRAM0
 ;;DATA
     RSRESET
-    DEF Entity_Comp RB 1
-    DEF Entity_ID RB 1
-    DEF Entity_OAMID RB 1           ;;comienza la id en 0, y va de 1 en 1, cada 1 en id son 8 posiciones en OAM
-    DEF Size RB 1
-    DEF Price RB 1
-    DEF Entity_PosY RB 1
-    DEF Entity_PosX RB 1
-    DEF Tile_num RB 1
+    DEF Entity_Comp RB 1    ; [Byte 0]
+    DEF Entity_ID RB 1      ; [Byte 1] 
+    DEF Entity_OAMID RB 1   ; [Byte 2]
+    DEF Entity_PosY RB 1    ; [Byte 3] 
+    DEF Entity_PosX RB 1    ; [Byte 4] 
+    DEF Sprite_num RB 1     ; [Byte 5]
+    DEF Entity_Attr RB 1    ; [Byte 6]
+    DEF Size RB 1           ; [Byte 7] 
+    DEF Price RB 1          ; [Byte 8]
 ;;Space for entities
     entity_array:: DS ENTITY_ARRAY_SIZE
-
-    ;;Cantidad de puntos
-    player_score:: DS 1
-
 
 SECTION "Entity Manager", ROM0
 
@@ -27,6 +24,18 @@ SECTION "Entity Manager", ROM0
 ;;ENTITY MANAGER-----------------
 ;;Struct player-------------------------------------------
 ;; AQUI IRIAN LOS STRUCTS PREDEFINIDOS SI QUEREMOS
+
+struct_player:
+    DB 1             ; [Byte 1] Entity_ID
+    DB 1             ; [Byte 2] Entity_OAMID
+    DB SPAWN_Y       ; [Byte 3] Entity_PosY
+    DB SPAWN_X       ; [Byte 4] Entity_PosX
+    DB SPRITE_PLAYER ; [Byte 5] Sprite_num
+    DB DEFAULT_ATR   ; [Byte 6] Entity_Attr
+    DB 1             ; [Byte 7] Size
+    DB 0             ; [Byte 8] Price
+    
+
 ;;
 
 ;;--------------------------------------------------------

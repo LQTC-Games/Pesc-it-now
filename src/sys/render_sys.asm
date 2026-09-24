@@ -197,62 +197,62 @@ ret
 
 ;; --------------------------------------------------
 ;; Pinta la entidad contenida en hl en la OAM
-;; INPUT: HL -> direccion de la entidad
+;; INPUT: HL -> direccion de la entidad (Aponta al Byte 0: Entity_Comp)
 sys_render_entity::
     inc hl
-    inc hl
-    ld a, [hl+]     ;;HL -> Entity_PosY, a -> Entity_OAMid
-    push hl
-    dec a
+    inc hl          ;; HL -> Byte 2: Entity_OAMID
+    ld a, [hl+]     ;; A = Entity_OAMID, HL avanza al Byte 3: Entity_PosY
+    push hl         ;; Guardamos el puntero de Entity_PosY para usarlo en el segundo sprite
+
+    ;; ¡Se ha eliminado el 'dec a' de aquí porque tu OAM_ID empieza en 0!
     sla a
     sla a
-    sla a                ;; A = A * 8
+    sla a           ;; A = A * 8
     ld de, copiaOAM
-    ld e, a         ;;DE -> OAM_DMA Posicion Y
+    ld e, a         ;; DE -> Posición inicial en la OAM DMA
 
-;;PRIMERA MITAD DEL SPRITE-----------------
+;; --- PRIMERA MITAD DEL SPRITE (Izquierda) ---
+    ;; PosY
+    ld a, [hl+]     ;; A = Entity_PosY (Byte 3), HL avanza al Byte 4: PosX
+    ld [de], a      ;; OAM[0] = PosY
+    inc de
 
-    ;;PosX y PosY
-    ld a, [hl+]     ;;HL -> Entiy_PosX, a -> Entity_PosY
-    ld [de], a      ;;DE -> OAM_DMA Posicion Y = Entity_PosY
-    inc de          ;;DE -> OAM_DMA Posicion X
-    ld a, [hl+]     ;;HL -> Entiy_PosYF, a -> Entity_PosX
-    ld [de], a      ;;DE -> OAM_DMA Posicion X = Entity_PosX
+    ;; PosX
+    ld a, [hl+]     ;; A = Entity_PosX (Byte 4), HL avanza al Byte 5: Sprite_num
+    ld [de], a      ;; OAM[1] = PosX
+    inc de
 
-    ;;Tile y atributo
-    inc de          ;;DE -> OAM_DMA Tile
-    inc hl          ;;HL -> Entiy_PosXF
-    inc hl          ;;HL -> Entity_Tile
-    ld a, [hl+]     ;;HL -> Entity_Atributo, a -> Entity_Tile
-    ld [de], a      ;;DE -> OAM_DMA Tile = Entity_tile
-    inc de          ;;DE -> OAM_DMA Atributo
-    ld a, [hl]      ;;a -> Entity_Atributo
-    ld [de], a      ;;DE -> OAM_DMA Atributo = Entity_Atributo
+    ;; Tile y Atributo
+    ld a, [hl+]     ;; A = Sprite_num (Byte 5), HL avanza al Byte 6: Entity_Attr
+    ld [de], a      ;; OAM[2] = Sprite_num
+    inc de
 
-;;SEGUNDA MITAD DEL SPRITE-----------------
+    ld a, [hl]      ;; A = Entity_Attr (Byte 6)
+    ld [de], a      ;; OAM[3] = Entity_Attr
 
-    inc de          ;;DE -> segundo sprite, pos y
-    pop hl          ;;HL -> Entity_Posy
+;; --- SEGUNDA MITAD DEL SPRITE (Derecha) ---
+    inc de          ;; DE -> Posición Y del próximo sprite en la OAM
+    pop hl          ;; HL vuelve a apuntar al Byte 3: Entity_PosY
 
-    ;;PosX y PosY
-    ld a, [hl+]     ;;HL -> Entiy_PosX, a -> Entity_PosY
-    ld [de], a      ;;DE -> OAM_DMA Posicion Y = Entity_PosY
-    inc de          ;;DE -> Posicion X
-    ld a, [hl+]     ;;HL -> Entiy_PosYF, a -> Entity_PosX
-    add 8           ;;a -> Entity_PosX + 8  (descuadre por ser segundo sprite)
-    ld [de], a      ;;DE -> OAM_DMA Posicion X = Entity_PosX + 8 (descuadre por ser segundo sprite)
+    ;; PosY
+    ld a, [hl+]     ;; A = Entity_PosY (Byte 3), HL avanza al Byte 4: PosX
+    ld [de], a      ;; OAM[4] = PosY
+    inc de
 
-    ;;Tile y atributo
-    inc de          ;;DE -> OAM_DMA Tile
-    inc hl          ;;HL -> Entiy_PosXF
-    inc hl          ;;HL -> Entity_Tile
-    ld a, [hl+]     ;;HL -> Entity_Atributo, a -> Entity_Tile
-    inc a
-    inc a           ;;A -> Sprite parte derecha
-    ld [de], a      ;;DE -> OAM_DMA Tile = Entity_tile + 2 posiciones por ser el segundo
-    inc de          ;;DE -> OAM_DMA Atributo
-    ld a, [hl]      ;;a -> Entity_Atributo
-    ld [de], a      ;;DE -> OAM_DMA Atributo = Entity_Atributo
+    ;; PosX desplazado
+    ld a, [hl+]     ;; A = Entity_PosX (Byte 4), HL avanza al Byte 5: Sprite_num
+    add a, 8        ;; Desplazamos 8 píxeles a la derecha para la segunda mitad del cuerpo
+    ld [de], a      ;; OAM[5] = PosX + 8
+    inc de
+
+    ;; Tile desplazado y Atributo
+    ld a, [hl+]     ;; A = Sprite_num (Byte 5), HL avanza al Byte 6: Entity_Attr
+    add a, 2        ;; Selecciona el tile correspondiente a la mitad derecha
+    ld [de], a      ;; OAM[6] = Sprite_num + 2
+    inc de
+
+    ld a, [hl]      ;; A = Entity_Attr (Byte 6)
+    ld [de], a      ;; OAM[7] = Entity_Attr
 ret
 
 load_background_sprites_VRAM::
@@ -269,32 +269,6 @@ load_mazorca_sprites_VRAM::
     call sys_render_load_sprite
 ret
 
-load_spikeRight_sprites_VRAM::
-    ld hl, FuegoRight0
-    ld bc, FuegoRight4End - FuegoRight0
-    ld de, $8400
-    call sys_render_load_sprite
-ret
 
-load_spikeLeft_sprites_VRAM::
-    ld hl, FuegoLeft0
-    ld bc, FuegoLeft4End - FuegoLeft0
-    ld de, $8600
-    call sys_render_load_sprite
-ret
-
-load_mazorcaDead_sprites_VRAM::
-    ld hl, MazorcaDead
-    ld bc, MazorcaDeadEnd - MazorcaDead
-    ld de, $8800
-    call sys_render_load_sprite
-ret
-
-load_Fuente_VRAM::
-    ld hl, Fuente
-    ld bc, TILE_SIZE
-    ld de, $8C00
-    call sys_render_load_sprite
-ret
 
 

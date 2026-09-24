@@ -2,7 +2,7 @@
 ;;CONSTANTS----------------------
 
 ;; MAN ENTITY ----------------
-DEF SIZEOF_E = 10
+DEF SIZEOF_E = 9
 DEF DEFAULT_CMP = $01
 DEF DEFAULT_DISABLED_CMP = $00
 DEF MAX_ENTITIES = 10

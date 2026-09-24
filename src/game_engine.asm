@@ -39,18 +39,47 @@ ret
 ;; DESTROYS: AF
 gameng_current_scene_update::
     ld a, [act_scene]
-    cp 0                            ;;escena del menú
-    jr nz, .comprobar_escena_game
-    call scene_menu_update
+    
+    cp 0
+    jr nz, .chk_1
+    call scene_menu_principal_update
     jr .exit
-
-    .comprobar_escena_game
+    
+    .chk_1
     cp 1
-    jr nz, .comprobar_escena_x
-    call scene_game_update
+    jr nz, .chk_2
+    call scene_menu_seleccion_update
     jr .exit
+    
+    .chk_2
+    cp 2
+    jr nz, .chk_3
+    call scene_menu_compra_update
+    jr .exit
+    
+    .chk_3
+    cp 3
+    jr nz, .chk_4
+    call scene_coleccion_update
+    jr .exit
+    
+    .chk_4
+    cp 4
+    jr nz, .chk_5
+    call scene_lago_update
+    jr .exit
+    
+    .chk_5
+    cp 5
+    jr nz, .chk_6
+    call scene_pantano_update
+    jr .exit
+    
+    .chk_6
+    cp 6
+    jr nz, .exit
+    call scene_oceano_update
 
-    .comprobar_escena_x
     .exit:
 ret
 
@@ -58,34 +87,79 @@ ret
 ;;-------------------------------------------------------
 ;; Realiza los cambios de escena inicializando la escena a la que se vaya a transicionar
 ;; DESTROYS: AF, [act_scene], [do_change]
-;; INPUT: [do_change]
 gameng_change_scene::
-    ;;Solo hará algo cuando [do_change] sea distinto de 0
-
     ld a, [do_change]
     cp 0
     jp z, .exit
 
-    cp 1    ;;si [do_change] es 1
-    jr nz, .is_not_one
+    cp 1
+    jr nz, .not_1
     ld a, 0
     ld [do_change], a
     ld a, 0
     ld [act_scene], a
-    call scene_menu_init
+    call scene_menu_principal_init
     jr .exit
+    .not_1:
 
-    .is_not_one:
-    cp 2    ;;si [do_change] es 2
-    jr nz, .is_not_two
+    cp 2
+    jr nz, .not_2
     ld a, 0
     ld [do_change], a
     ld a, 1
     ld [act_scene], a
-    call scene_game_init
+    call scene_menu_seleccion_init
     jr .exit
+    .not_2:
 
-    .is_not_two
+    cp 3
+    jr nz, .not_3
+    ld a, 0
+    ld [do_change], a
+    ld a, 2
+    ld [act_scene], a
+    call scene_menu_compra_init
+    jr .exit
+    .not_3:
+
+    cp 4
+    jr nz, .not_4
+    ld a, 0
+    ld [do_change], a
+    ld a, 3
+    ld [act_scene], a
+    call scene_coleccion_init
+    jr .exit
+    .not_4:
+
+    cp 5
+    jr nz, .not_5
+    ld a, 0
+    ld [do_change], a
+    ld a, 4
+    ld [act_scene], a
+    call scene_lago_init
+    jr .exit
+    .not_5:
+
+    cp 6
+    jr nz, .not_6
+    ld a, 0
+    ld [do_change], a
+    ld a, 5
+    ld [act_scene], a
+    call scene_pantano_init
+    jr .exit
+    .not_6:
+
+    cp 7
+    jr nz, .exit
+    ld a, 0
+    ld [do_change], a
+    ld a, 6
+    ld [act_scene], a
+    call scene_oceano_init
+
     .exit:
 ret
 
@@ -98,7 +172,7 @@ gameng_init::
 ret
 
 gameng_run::
-    call scene_menu_init
+    call scene_menu_principal_init
     ; call scene_game_initc
     .gameloop
         call utils_read_buttons
