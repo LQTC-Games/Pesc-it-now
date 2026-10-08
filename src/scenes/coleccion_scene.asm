@@ -9,6 +9,7 @@ scene_coleccion_init::
     call scene_coleccion_load_all_sprites_VRAM
     call scene_coleccion_draw_background    
     call LCDCon
+    call man_entity_init
     
 ret 
 

@@ -9,6 +9,7 @@ scene_menu_compra_init::
     call scene_menu_compra_load_all_sprites_VRAM
     call scene_menu_compra_draw_background    
     call LCDCon
+    call man_entity_init
     
 ret 
 

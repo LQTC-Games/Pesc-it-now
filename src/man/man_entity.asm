@@ -241,14 +241,48 @@ man_entity_update::
 ret
 
 ;;-------------------------------------------------------
-;; Actualiza los valores de la entidad pasada en HL
-;; DESTROYS: AF, DE, HL
+;; Mueve la entidad pasada en HL segun la cruz (botones mantenidos),
+;; respetando los limites LIMIT_MIN/MAX_X/Y de include.inc
+;; DESTROYS: AF, B, HL
 ;; INPUT:
-;; - HL -> dirección de una entidad válida del entity_sarray
+;; - HL -> dirección de una entidad válida del entity_array
 ;;
 man_entity_update_single::
-    inc hl                  ;;Colocamos HL en Entity_Type
-    ld a, [hl]              ;;Guardamos el tipo en A
+    ldh a, [estadoBotones]
+    ld b, a
+    inc hl
+    inc hl
+    inc hl                  ; HL -> Entity_PosY
+    .up:
+        bit 6, b
+        jr z, .down
+        ld a, [hl]
+        cp LIMIT_MIN_Y + 1
+        jr c, .down
+        dec [hl]
+    .down:
+        bit 7, b
+        jr z, .horizontal
+        ld a, [hl]
+        cp LIMIT_MAX_Y
+        jr nc, .horizontal
+        inc [hl]
+    .horizontal:
+        inc hl              ; HL -> Entity_PosX
+    .left:
+        bit 5, b
+        jr z, .right
+        ld a, [hl]
+        cp LIMIT_MIN_X + 1
+        jr c, .right
+        dec [hl]
+    .right:
+        bit 4, b
+        ret z
+        ld a, [hl]
+        cp LIMIT_MAX_X
+        ret nc
+        inc [hl]
 ret
 
 

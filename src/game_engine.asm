@@ -1,11 +1,13 @@
 SECTION "Actual scene", WRAM0
     loaded_high_score: ds 1
-    act_scene:: DS 1 ;; 0 -> escena menú
-                    ;; 1 -> escena gameplay
+    act_scene:: DS 1 ;; 0 -> menu principal    4 -> lago
+                    ;; 1 -> menu seleccion    5 -> pantano
+                    ;; 2 -> menu compra       6 -> oceano
+                    ;; 3 -> coleccion
 
-    do_change:: DS 1 ;;Cuando sea 0 no cambiará
-                    ;;cuando sea 1 cambiará a la escena del menu
-                    ;;cuando sea 2 cambiará a la escena del juego
+    do_change:: DS 1 ;; 0 -> no cambia. N (1..7) -> pasa a la escena act_scene = N-1
+                    ;; (1 principal, 2 seleccion, 3 compra, 4 coleccion,
+                    ;;  5 lago, 6 pantano, 7 oceano)
 
 
 

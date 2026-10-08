@@ -9,6 +9,7 @@ scene_oceano_init::
     call scene_oceano_load_all_sprites_VRAM
     call scene_oceano_draw_background    
     call LCDCon
+    call man_entity_init
 ret 
 
 scene_oceano_buttons:

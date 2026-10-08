@@ -3,7 +3,8 @@ INCLUDE "hardware.inc"
 SECTION "Entry point", ROM0[$150]
 
 main::
-  
+  ld sp, $FFFE  
+
   ld a, %11_10_01_00
   ldh [rBGP], a
   call gameng_init

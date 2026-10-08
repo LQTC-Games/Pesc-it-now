@@ -9,6 +9,7 @@ scene_menu_seleccion_init::
     call scene_menu_seleccion_load_all_sprites_VRAM
     call scene_menu_seleccion_draw_background    
     call LCDCon
+    call man_entity_init
 ret 
 
 scene_menu_seleccion_buttons:
@@ -60,8 +61,7 @@ ret
 
 scene_menu_seleccion_update::
     call sys_render_update
-    call scene_menu_seleccion_buttons
-    call man_entity_update
+    call scene_menu_seleccion_buttons   ;; la cruz elige zona: aqui la entidad no se mueve
 ret
 
 

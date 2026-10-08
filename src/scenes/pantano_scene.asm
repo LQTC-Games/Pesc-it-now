@@ -9,6 +9,7 @@ scene_pantano_init::
     call scene_pantano_load_all_sprites_VRAM
     call scene_pantano_draw_background    
     call LCDCon
+    call man_entity_init
 ret 
 
 scene_pantano_buttons:
